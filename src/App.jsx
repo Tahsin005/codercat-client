@@ -1,0 +1,28 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import Layout from './components/Layout';
+import HomePage from './pages/HomePage';
+import BlogPage from './pages/BlogPage';
+import BlogPostPage from './pages/BlogPostPage';
+import SearchPage from './pages/SearchPage';
+import AboutPage from './pages/AboutPage';
+
+import './App.css';
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage />} />
+          <Route path="blog" element={<BlogPage />} />
+          <Route path="blog/:id" element={<BlogPostPage />} />
+          <Route path="search" element={<SearchPage />} />
+          <Route path="about" element={<AboutPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
