@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 
 const BlogCard = ({ post, featured = false }) => {
-  console.log(post);
   return (
     <article
       className={`card group h-full flex flex-col overflow-hidden animate-fade-in ${

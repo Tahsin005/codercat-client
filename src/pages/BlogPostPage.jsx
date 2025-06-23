@@ -4,35 +4,20 @@ import { format } from 'date-fns';
 import { blogPosts, getRelatedPosts } from '../data/blogPosts';
 import BlogCard from '../components/BlogCard';
 import { FiArrowLeft, FiClock, FiShare2, FiBookmark } from 'react-icons/fi';
+import { useGetBlogByIdQuery } from '../api/apiSlice';
+import { toast } from 'react-hot-toast';
 
 const BlogPostPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const postId = parseInt(id, 10);
-
-  const [post, setPost] = useState(null);
+  const { data: post, isLoading } = useGetBlogByIdQuery(id);
   const [relatedPosts, setRelatedPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [postShare, setPostShare] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    // Simulate loading
-    setIsLoading(true);
-
-    const timer = setTimeout(() => {
-      const foundPost = blogPosts.find(p => p.id === postId);
-
-      if (foundPost) {
-        setPost(foundPost);
-        setRelatedPosts(getRelatedPosts(postId, 2));
-      }
-
-      setIsLoading(false);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [postId]);
+    setPostShare("http://localhost:5173/blog/" + id);
+  }, [post]);
 
   if (isLoading) {
     return (
@@ -94,7 +79,7 @@ const BlogPostPage = () => {
               </time>
               <span>•</span>
               <span className="flex items-center">
-                <FiClock className="mr-1" /> {post.readTime} min read
+                <FiClock className="mr-1" /> {post.readTime} read
               </span>
             </div>
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 animate-fade-in">
@@ -144,13 +129,9 @@ const BlogPostPage = () => {
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <button className="flex items-center text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                  <button className="flex items-center text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors" onClick={() => {navigator.clipboard.writeText(postShare); toast.success("Link copied to clipboard")}}>
                     <FiShare2 className="mr-2" />
                     Share
-                  </button>
-                  <button className="flex items-center text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-                    <FiBookmark className="mr-2" />
-                    Save
                   </button>
                 </div>
               </div>

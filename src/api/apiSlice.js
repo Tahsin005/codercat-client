@@ -9,10 +9,13 @@ export const api = createApi({
         getBlogs: builder.query({
             query: () => '/blogs',
         }),
+        getBlogById: builder.query({
+            query: (id) => `/blogs/${id}`,
+        }),
         getRecentBlogs: builder.query({
             query: () => '/blogs/recent?limit=3',
         }),
     }),
 });
 
-export const { useGetBlogsQuery, useGetRecentBlogsQuery } = api;
+export const { useGetBlogsQuery, useGetRecentBlogsQuery, useGetBlogByIdQuery } = api;
