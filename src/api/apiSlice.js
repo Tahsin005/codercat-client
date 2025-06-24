@@ -15,7 +15,10 @@ export const api = createApi({
         getRecentBlogs: builder.query({
             query: () => '/blogs/recent?limit=3',
         }),
+        getFeaturedBlogs: builder.query({
+            query: () => '/blogs/featured',
+        }),
     }),
 });
 
-export const { useGetBlogsQuery, useGetRecentBlogsQuery, useGetBlogByIdQuery } = api;
+export const { useGetBlogsQuery, useGetRecentBlogsQuery, useGetBlogByIdQuery, useGetFeaturedBlogsQuery } = api;
