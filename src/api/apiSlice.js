@@ -18,7 +18,13 @@ export const api = createApi({
         getFeaturedBlogs: builder.query({
             query: () => '/blogs/featured',
         }),
+        getPostsByCategory: builder.query({
+            query: (category) => `/blogs/category/${category}`,
+        }),
+        getCategories: builder.query({
+            query: () => '/categories',
+        }),
     }),
 });
 
-export const { useGetBlogsQuery, useGetRecentBlogsQuery, useGetBlogByIdQuery, useGetFeaturedBlogsQuery } = api;
+export const { useGetBlogsQuery, useGetRecentBlogsQuery, useGetBlogByIdQuery, useGetFeaturedBlogsQuery, useGetPostsByCategoryQuery, useGetCategoriesQuery } = api;

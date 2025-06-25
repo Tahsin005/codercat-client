@@ -2,28 +2,16 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import BlogCard from '../components/BlogCard';
 import CategoryFilter from '../components/CategoryFilter';
-import { getPostsByCategory } from '../data/blogPosts';
+import { useGetPostsByCategoryQuery } from '../api/apiSlice';
 
 const BlogPage = () => {
   const [searchParams] = useSearchParams();
   const categoryParam = searchParams.get('category') || 'All';
-
-  const [posts, setPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: posts, isLoading, refetch } = useGetPostsByCategoryQuery(categoryParam);
 
   useEffect(() => {
-    // Simulate loading data
-    setIsLoading(true);
-
-    // Small timeout to simulate fetching data
-    const timer = setTimeout(() => {
-      const filteredPosts = getPostsByCategory(categoryParam);
-      setPosts(filteredPosts);
-      setIsLoading(false);
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [categoryParam]);
+    refetch();
+  }, [categoryParam, refetch]);
 
   return (
     <div className="bg-white dark:bg-gray-950 min-h-screen">

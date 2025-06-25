@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { categories } from '../data/blogPosts';
+import { useGetCategoriesQuery } from '../api/apiSlice';
 
 const CategoryFilter = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentCategory = searchParams.get('category') || 'All';
   const scrollRef = useRef(null);
-  
+  const { data: categories, isLoading } = useGetCategoriesQuery();
   const [isScrollable, setIsScrollable] = useState(false);
   const [showLeftScroll, setShowLeftScroll] = useState(false);
   const [showRightScroll, setShowRightScroll] = useState(false);
@@ -30,10 +30,10 @@ const CategoryFilter = () => {
 
   const checkScroll = () => {
     if (!scrollRef.current) return;
-    
+
     const { current } = scrollRef;
     const { scrollLeft, scrollWidth, clientWidth } = current;
-    
+
     setIsScrollable(scrollWidth > clientWidth);
     setShowLeftScroll(scrollLeft > 0);
     setShowRightScroll(scrollLeft < scrollWidth - clientWidth - 10); // 10px buffer
@@ -53,10 +53,20 @@ const CategoryFilter = () => {
     }
   }, [scrollRef]);
 
+  if (isLoading || !categories) {
+    return (
+      <div className="flex space-x-2 overflow-x-auto py-2 px-1">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <div key={i} className="animate-pulse bg-gray-200 dark:bg-gray-700 rounded-full px-4 py-2 w-20 h-8"></div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="relative">
       {isScrollable && showLeftScroll && (
-        <button 
+        <button
           onClick={() => scroll('left')}
           className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white dark:bg-gray-900 shadow-md dark:shadow-gray-800 rounded-full p-1"
           aria-label="Scroll left"
@@ -66,8 +76,8 @@ const CategoryFilter = () => {
           </svg>
         </button>
       )}
-      
-      <div 
+
+      <div
         ref={scrollRef}
         className="flex space-x-2 overflow-x-auto scrollbar-hide py-2 px-1 relative"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
@@ -86,9 +96,9 @@ const CategoryFilter = () => {
           </button>
         ))}
       </div>
-      
+
       {isScrollable && showRightScroll && (
-        <button 
+        <button
           onClick={() => scroll('right')}
           className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white dark:bg-gray-900 shadow-md dark:shadow-gray-800 rounded-full p-1"
           aria-label="Scroll right"
