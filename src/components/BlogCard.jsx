@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 
-const BlogCard = ({ post, featured = false }) => {
+const BlogCard = ({ post, postIndex }) => {
+  const justDoIt = postIndex % 3 === 0;
   return (
     <article
-      className={`card group h-full flex flex-col overflow-hidden animate-fade-in ${
-        featured ? 'md:col-span-2 lg:col-span-2' : ''
-      }`}
+      className={`card group flex flex-col overflow-hidden animate-fade-in
+        ${justDoIt ? 'col-span-2 row-span-2' : 'col-span-1 row-span-1'}
+      `}
     >
       <div className="relative overflow-hidden aspect-video">
         <Link to={`/blog/${post.id}`}>
@@ -31,7 +32,7 @@ const BlogCard = ({ post, featured = false }) => {
         </div>
 
         <h2 className={`font-bold mb-3 transition-colors group-hover:text-primary-600 dark:group-hover:text-primary-400 ${
-          featured ? 'text-2xl md:text-3xl' : 'text-xl'
+          justDoIt ? 'text-2xl md:text-3xl' : 'text-xl'
         }`}>
           <Link to={`/blog/${post.id}`}>
             {post.title}
