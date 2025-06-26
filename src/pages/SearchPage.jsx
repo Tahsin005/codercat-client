@@ -1,33 +1,32 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { searchPosts } from '../data/blogPosts';
+import { FiSearch } from 'react-icons/fi';
+import { useGetBlogsBySearchQuery } from '../api/apiSlice';
 import SearchBar from '../components/SearchBar';
 import BlogCard from '../components/BlogCard';
-import { FiSearch } from 'react-icons/fi';
 
 const SearchPage = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
 
+  const { data: searchResults, isLoading: isSearchLoading } = useGetBlogsBySearchQuery(query);
+
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Update results and loading state based on query
   useEffect(() => {
     if (query) {
       setIsLoading(true);
-
-      // Simulate search delay
-      const timer = setTimeout(() => {
-        const searchResults = searchPosts(query);
+      if (!isSearchLoading && searchResults) {
         setResults(searchResults);
         setIsLoading(false);
-      }, 500);
-
-      return () => clearTimeout(timer);
+      }
     } else {
       setResults([]);
+      setIsLoading(false);
     }
-  }, [query]);
+  }, [query, searchResults, isSearchLoading]);
 
   return (
     <div className="bg-white dark:bg-gray-950 min-h-screen">
@@ -36,7 +35,6 @@ const SearchPage = () => {
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white text-center mb-8">
             Search Tutorials
           </h1>
-
           <SearchBar />
         </div>
       </div>
@@ -76,7 +74,7 @@ const SearchPage = () => {
                   No results found
                 </h3>
                 <p className="text-gray-700 dark:text-gray-300 mb-6">
-                  We couldn not find any tutorials matching your search.
+                  We couldn’t find any tutorials matching your search.
                 </p>
                 <Link to="/blog" className="btn-primary">
                   Browse all tutorials
