@@ -6,7 +6,6 @@ import { useGetRecentBlogsQuery } from '../api/apiSlice';
 
 const HomePage = () => {
   const { data: recentPosts = [], isLoading, isError } = useGetRecentBlogsQuery();
-  console.log(recentPosts);
 
   return (
     <div>

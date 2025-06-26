@@ -1,20 +1,21 @@
 import { useState } from 'react';
-
+import { useSubscribeToNewsletterMutation } from '../api/apiSlice';
+import { toast } from 'react-hot-toast';
 const NewsletterSection = () => {
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  const [subscribeToNewsletter, { isLoading }] = useSubscribeToNewsletterMutation();
   const handleSubmit = (e) => {
     e.preventDefault();
-    // In a real app, this would send the email to a backend service
-    console.log('Subscribing email:', email);
+    subscribeToNewsletter(email).then((res) => {
+      if (res.error) {
+        toast.error('Failed to subscribe');
+      } else {
+        toast.success('Subscribed to newsletter');
+      }
+    });
     setIsSubmitted(true);
     setEmail('');
-
-    // Reset the submission status after 5 seconds
-    setTimeout(() => {
-      setIsSubmitted(false);
-    }, 5000);
   };
 
   return (

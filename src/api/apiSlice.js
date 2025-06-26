@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const baseUrl = import.meta.env.VITE_API_URL;
+console.log(baseUrl);
 
 export const api = createApi({
     reducerPath: 'api',
@@ -24,7 +25,14 @@ export const api = createApi({
         getCategories: builder.query({
             query: () => '/categories',
         }),
+        subscribeToNewsletter: builder.mutation({
+            query: (email) => ({
+                url: '/subscribe',
+                method: 'POST',
+                body: JSON.stringify({ email }),
+            }),
+        }),
     }),
 });
 
-export const { useGetBlogsQuery, useGetRecentBlogsQuery, useGetBlogByIdQuery, useGetFeaturedBlogsQuery, useGetPostsByCategoryQuery, useGetCategoriesQuery } = api;
+export const { useGetBlogsQuery, useGetRecentBlogsQuery, useGetBlogByIdQuery, useGetFeaturedBlogsQuery, useGetPostsByCategoryQuery, useGetCategoriesQuery, useSubscribeToNewsletterMutation } = api;
