@@ -129,7 +129,14 @@ const BlogPostPage = () => {
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <button className="flex items-center text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors" onClick={() => {navigator.clipboard.writeText(postShare); toast.success("Link copied to clipboard")}}>
+                  <button className="flex items-center text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors" onClick={() => {
+                    if (navigator.clipboard) {
+                      navigator.clipboard.writeText(postShare);
+                      toast.success("Link copied to clipboard");
+                    } else {
+                      toast.error("Clipboard not supported in this browser");
+                    }
+                  }}>
                     <FiShare2 className="mr-2" />
                     Share
                   </button>
