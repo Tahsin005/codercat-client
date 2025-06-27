@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { FiSearch } from 'react-icons/fi';
-import { useGetBlogsBySearchQuery } from '../api/apiSlice';
+import { useGetBlogsBySearchQuery, useGetPopularCategoriesQuery } from '../api/apiSlice';
 import SearchBar from '../components/SearchBar';
 import BlogCard from '../components/BlogCard';
 
@@ -10,7 +10,7 @@ const SearchPage = () => {
   const query = searchParams.get('q') || '';
 
   const { data: searchResults, isLoading: isSearchLoading } = useGetBlogsBySearchQuery(query);
-
+  const { data: popularCategories, isLoading: isPopularCategoriesLoading } = useGetPopularCategoriesQuery();
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -74,7 +74,7 @@ const SearchPage = () => {
                   No results found
                 </h3>
                 <p className="text-gray-700 dark:text-gray-300 mb-6">
-                  We couldn’t find any tutorials matching your search.
+                  We couldn't find any tutorials matching your search.
                 </p>
                 <Link to="/blog" className="btn-primary">
                   Browse all tutorials
@@ -91,23 +91,17 @@ const SearchPage = () => {
               Search for coding knowledge
             </h2>
             <p className="text-gray-700 dark:text-gray-300 mb-6">
-              Enter a search term above to find tutorials about JavaScript, React, Python, and more developer tips.
+              Enter a search term above.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left mt-8">
-              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Popular searches</h3>
-                <div className="flex flex-wrap gap-2">
-                  <Link to="/search?q=javascript" className="text-sm bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full text-gray-800 dark:text-gray-200">javascript</Link>
-                  <Link to="/search?q=react" className="text-sm bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full text-gray-800 dark:text-gray-200">react</Link>
-                  <Link to="/search?q=python" className="text-sm bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full text-gray-800 dark:text-gray-200">python</Link>
-                </div>
-              </div>
-              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+            <div className="grid grid-cols-1 gap-4 text-left mt-8">
+              <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm flex flex-col items-center gap-y-2">
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Popular categories</h3>
                 <div className="flex flex-wrap gap-2">
-                  <Link to="/blog?category=Frontend" className="text-sm bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full text-gray-800 dark:text-gray-200">Frontend</Link>
-                  <Link to="/blog?category=Backend" className="text-sm bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full text-gray-800 dark:text-gray-200">Backend</Link>
-                  <Link to="/blog?category=DevOps" className="text-sm bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full text-gray-800 dark:text-gray-200">DevOps</Link>
+                  {!isPopularCategoriesLoading && popularCategories && popularCategories.map(category => (
+                    <Link to={`/blog?category=${category}`} key={category} className="text-sm bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full text-gray-800 dark:text-gray-200">
+                      {category}
+                    </Link>
+                  ))}
                 </div>
               </div>
             </div>
