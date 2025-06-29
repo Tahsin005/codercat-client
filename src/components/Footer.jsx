@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { FiTwitter, FiInstagram, FiFacebook, FiGithub } from 'react-icons/fi';
+import CatImage from '../assets/cat.png';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -14,7 +15,7 @@ const Footer = () => {
               to="/"
               className="flex items-center space-x-2 text-2xl font-bold text-primary-600 dark:text-primary-400"
             >
-              <span className="text-3xl">🐱</span>
+              <img src={CatImage} alt="Cat" className="w-10 h-10" />
               <span>Coder Cat</span>
             </Link>
             <p className="mt-4 text-gray-600 dark:text-gray-400">

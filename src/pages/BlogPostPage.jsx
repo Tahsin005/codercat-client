@@ -4,14 +4,14 @@ import { format } from 'date-fns';
 import { blogPosts, getRelatedPosts } from '../data/blogPosts';
 import BlogCard from '../components/BlogCard';
 import { FiArrowLeft, FiClock, FiShare2, FiBookmark } from 'react-icons/fi';
-import { useGetBlogByIdQuery } from '../api/apiSlice';
+import { useGetBlogByIdQuery, useGetRelatedBlogsQuery } from '../api/apiSlice';
 import { toast } from 'react-hot-toast';
 
 const BlogPostPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: post, isLoading } = useGetBlogByIdQuery(id);
-  const [relatedPosts, setRelatedPosts] = useState([]);
+  const { data: relatedPosts, isLoading: isRelatedPostsLoading } = useGetRelatedBlogsQuery(id);
   const [postShare, setPostShare] = useState(null);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const BlogPostPage = () => {
           </button>
         </div>
         <div className="absolute bottom-0 left-0 right-0 container-custom p-6 z-20">
-          <div className="max-w-3xl">
+          <div className="max-w-3xl text-start">
             <div className="flex items-center space-x-2 text-sm text-white/80 mb-3">
               <span className="bg-primary-600 text-white text-xs font-medium px-2.5 py-1 rounded-md">
                 {post.category}
@@ -108,7 +108,7 @@ const BlogPostPage = () => {
         <div className="flex flex-col md:flex-row gap-10">
           <article className="max-w-3xl w-full mx-auto">
             <div
-              className="prose prose-lg dark:prose-invert max-w-none mb-8"
+              className="prose prose-lg text-lg dark:prose-invert text-start max-w-none mb-8"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
 
@@ -168,7 +168,7 @@ const BlogPostPage = () => {
         </div>
       </div>
 
-      {relatedPosts.length > 0 && (
+      {relatedPosts && relatedPosts.length > 0 && (
         <div className="bg-gray-50 dark:bg-gray-900 py-12">
           <div className="container-custom">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">

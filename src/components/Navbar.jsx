@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { FiMenu, FiX, FiSearch } from 'react-icons/fi';
 import ThemeToggle from './ThemeToggle';
+import CatImage from '../assets/cat.png';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -44,7 +45,7 @@ const Navbar = () => {
           to="/"
           className="flex items-center space-x-2 text-2xl font-bold text-primary-600 dark:text-primary-400"
         >
-          <span className="text-3xl">🐱</span>
+          <img src={CatImage} alt="Cat" className="w-10 h-10" />
           <span className="hidden sm:inline">CoderCat</span>
         </Link>
 

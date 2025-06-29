@@ -5,8 +5,8 @@ const BlogCard = ({ post, postIndex }) => {
   const justDoIt = postIndex % 3 === 0;
   return (
     <article
-      className={`card group flex flex-col overflow-hidden animate-fade-in
-        ${justDoIt ? 'col-span-2 row-span-2' : 'col-span-1 row-span-1'}
+      className={`card group flex flex-col overflow-hidden animate-fade-in text-start
+        ${justDoIt ? 'col-span-1 row-span-1' : 'col-span-1 row-span-1'}
       `}
     >
       <div className="relative overflow-hidden aspect-video">

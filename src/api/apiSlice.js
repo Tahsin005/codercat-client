@@ -31,6 +31,9 @@ export const api = createApi({
         getPopularCategories: builder.query({
             query: () => '/categories/popular',
         }),
+        getRelatedBlogs: builder.query({
+            query: (blogId) => `/blogs/related/${blogId}`
+        }),
         subscribeToNewsletter: builder.mutation({
             query: (email) => ({
                 url: '/subscribe',
@@ -41,4 +44,4 @@ export const api = createApi({
     }),
 });
 
-export const { useGetBlogsQuery, useGetRecentBlogsQuery, useGetBlogByIdQuery, useGetFeaturedBlogsQuery, useGetPostsByCategoryQuery, useGetCategoriesQuery, useSubscribeToNewsletterMutation, useGetBlogsBySearchQuery, useGetPopularCategoriesQuery } = api;
+export const { useGetBlogsQuery, useGetRecentBlogsQuery, useGetBlogByIdQuery, useGetFeaturedBlogsQuery, useGetPostsByCategoryQuery, useGetCategoriesQuery, useSubscribeToNewsletterMutation, useGetBlogsBySearchQuery, useGetPopularCategoriesQuery, useGetRelatedBlogsQuery } = api;

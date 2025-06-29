@@ -97,11 +97,11 @@ const SearchPage = () => {
               <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm flex flex-col items-center gap-y-2">
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Popular categories</h3>
                 <div className="flex flex-wrap gap-2">
-                  {!isPopularCategoriesLoading && popularCategories && popularCategories.map(category => (
+                  {isPopularCategoriesLoading ? 'Loading...' : popularCategories.length > 0 ? popularCategories.map(category => (
                     <Link to={`/blog?category=${category}`} key={category} className="text-sm bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full text-gray-800 dark:text-gray-200">
                       {category}
                     </Link>
-                  ))}
+                  )) : 'No popular categories'}
                 </div>
               </div>
             </div>

@@ -101,7 +101,7 @@ const HeroSection = () => {
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   style={{ minHeight: '400px', objectPosition: 'center' }}
                 />
-                <div className="absolute bottom-0 left-0 right-0 p-6 z-20 transform transition-transform duration-300 translate-y-0 group-hover:translate-y-[-8px]">
+                <div className="absolute text-start bottom-0 left-0 right-0 p-6 z-20 transform transition-transform duration-300 translate-y-0 group-hover:translate-y-[-8px]">
                   <div className="flex items-center space-x-2 text-sm text-white/80 mb-3">
                     <span className="bg-primary-600 text-white text-xs font-medium px-2.5 py-1 rounded-md">
                       {mainFeature.category}
@@ -145,7 +145,7 @@ const HeroSection = () => {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     style={{ minHeight: '200px', objectPosition: 'center' }}
                   />
-                  <div className="absolute bottom-0 left-0 right-0 p-4 z-20 transform transition-transform duration-300 translate-y-0 group-hover:translate-y-[-8px]">
+                  <div className="absolute text-start bottom-0 left-0 right-0 p-4 z-20 transform transition-transform duration-300 translate-y-0 group-hover:translate-y-[-8px]">
                     <div className="flex items-center space-x-2 text-xs text-white/80 mb-2">
                       <span className="bg-primary-600 text-white text-xs font-medium px-2 py-0.5 rounded-md">
                         {post.category}
