@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import { FiTwitter, FiInstagram, FiFacebook, FiGithub } from 'react-icons/fi';
 import CatImage from '../assets/cat.png';
+import { useGetPopularCategoriesQuery } from '../api/apiSlice';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-
+  const { data: popularCategories, isLoading, isError } = useGetPopularCategoriesQuery();
+  console.log(popularCategories);
   return (
     <footer className="bg-gray-100 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
       <div className="container-custom py-12 text-start">
@@ -49,13 +51,20 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Topics</h3>
-            <ul className="space-y-2">
-              <li><Link to="/blog?category=Web+Development" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Web Development</Link></li>
-              <li><Link to="/blog?category=Programming+Tips" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Programming Tips</Link></li>
-              <li><Link to="/blog?category=Debugging+Diaries" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Debugging Diaries</Link></li>
-              <li><Link to="/blog?category=Tech+Meowments" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Tech Meowments</Link></li>
-            </ul>
+            {!isLoading && popularCategories && popularCategories.length > 0 && (
+              <>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Topics</h3>
+                <ul className="space-y-2">
+                  {popularCategories.map((category, index) => (
+                    <li key={index}>
+                      <Link to={`/blog?category=${category.name || category}`} className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                        {category.name || category}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
           </div>
         </div>
 
@@ -65,13 +74,6 @@ const Footer = () => {
             <p className="text-gray-600 dark:text-gray-400 text-sm">
               &copy; {currentYear} CoderCat. Crafted with paws and precision.
             </p>
-            <div className="mt-4 md:mt-0">
-              <ul className="flex space-x-6 text-sm">
-                <li><a href="#" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Terms of Service</a></li>
-                <li><a href="#" className="text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Cookie Policy</a></li>
-              </ul>
-            </div>
           </div>
         </div>
       </div>

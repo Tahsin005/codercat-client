@@ -14,7 +14,7 @@ const HomePage = () => {
       <section className="py-16 bg-white dark:bg-gray-950">
         <div className="container-custom">
           <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-            <div>
+            <div className='text-start'>
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Latest Tutorials</h2>
               <p className="text-lg text-gray-700 dark:text-gray-300 mt-2">
                 Fresh coding tips and tricks from CoderCat

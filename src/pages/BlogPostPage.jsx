@@ -151,7 +151,7 @@ const BlogPostPage = () => {
                   alt={post.author}
                   className="w-16 h-16 rounded-full object-cover"
                 />
-                <div>
+                <div className='text-start'>
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                     {post.author}
                   </h3>

@@ -26,7 +26,7 @@ const AboutPage = () => {
                 At CoderCat, we believe learning to code should be as engaging and instinctive as a cat chasing a laser pointer. Our mission is to make programming approachable, fun, and empowering for developers of all levels.
               </p>
               <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
-                Launched in 2025 by passionate developers and cat-loving creatives, CoderCat exists to simplify complex coding topics using playful analogies, clear examples, and a touch of feline charm.
+                Launched in 2025 by MD. Tahsin Ferdous as a cat-loving creative, CoderCat exists to simplify complex coding topics using playful analogies, clear examples, and a touch of feline charm.
               </p>
               <p className="text-lg text-gray-700 dark:text-gray-300">
                 Whether you are debugging in Python, building with React, or just starting out, we are here to make the journey a little more enjoyable — and a lot more cat-tastic.
