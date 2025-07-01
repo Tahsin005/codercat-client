@@ -1,0 +1,187 @@
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useGetBlogsQuery } from '../api/apiSlice';
+import { FiEdit3, FiTrash2, FiEye, FiPlus, FiSearch } from 'react-icons/fi';
+
+const EditorPage = () => {
+    const { secretOne, secretTwo } = useParams();
+    const navigate = useNavigate();
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('all');
+
+    const secretValueFromEnvOne = import.meta.env.VITE_EDITOR_SECRET_ONE;
+    const secretValueFromEnvTwo = import.meta.env.VITE_EDITOR_SECRET_TWO;
+
+    useEffect(() => {
+        if (secretOne !== secretValueFromEnvOne || secretTwo !== secretValueFromEnvTwo) {
+            navigate('/');
+        }
+    }, [secretOne, secretTwo, secretValueFromEnvOne, secretValueFromEnvTwo, navigate]);
+
+    const { data: posts, isLoading, isError } = useGetBlogsQuery();
+
+    if (isLoading) {
+        return (
+            <div className="bg-white dark:bg-gray-950 min-h-screen">
+                <div className="bg-gradient-to-b from-primary-50 to-white dark:from-gray-900 dark:to-gray-950 pt-16 pb-10">
+                    <div className="container-custom">
+                        <div className="animate-pulse">
+                            <div className="h-8 bg-gray-300 dark:bg-gray-700 rounded w-1/3 mb-4"></div>
+                            <div className="h-4 bg-gray-300 dark:bg-gray-700 rounded w-1/2"></div>
+                        </div>
+                    </div>
+                </div>
+                <div className="container-custom py-12">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {[1, 2, 3, 4, 5, 6].map(i => (
+                            <div key={i} className="animate-pulse bg-gray-100 dark:bg-gray-800 rounded-xl h-96"></div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (isError) {
+        return (
+            <div className="bg-white dark:bg-gray-950 min-h-screen">
+                <div className="bg-gradient-to-b from-primary-50 to-white dark:from-gray-900 dark:to-gray-950 pt-16 pb-10">
+                    <div className="container-custom text-center">
+                        <p className="text-red-600 dark:text-red-400 text-xl md:text-2xl font-semibold">
+                            ⚠️ Failed to load blogs. Please try again later.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    const filteredPosts = posts?.filter(post => {
+        const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                             post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesCategory = selectedCategory === 'all' || post.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+    }) || [];
+
+    const categories = ['all', ...new Set(posts?.map(post => post.category) || [])];
+
+    return (
+        <div className="bg-white dark:bg-gray-950 min-h-screen">
+            <div className="bg-gradient-to-b from-primary-50 to-white dark:from-gray-900 dark:to-gray-950 pt-16 pb-10">
+                <div className="container-custom">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+                        <div className="text-start">
+                            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 animate-fade-in">
+                                <span className="text-primary-600 dark:text-primary-400">Editor</span> Dashboard
+                            </h1>
+                            <p className="text-lg text-gray-700 dark:text-gray-300 animate-slide-up">
+                                Manage and edit coding tutorials with feline precision
+                            </p>
+                        </div>
+                        <Link
+                            to="/editor/new"
+                            className="btn-primary inline-flex items-center self-start"
+                        >
+                            <FiPlus className="h-5 w-5 mr-2" />
+                            Create New Post
+                        </Link>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <div className="relative">
+                            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                            <input
+                                type="text"
+                                placeholder="Search posts..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+                            />
+                        </div>
+                        <select
+                            value={selectedCategory}
+                            onChange={(e) => setSelectedCategory(e.target.value)}
+                            className="px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+                        >
+                            {categories.map(category => (
+                                <option key={category} value={category}>
+                                    {category === 'all' ? 'All Categories' : category}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div className="container-custom py-12">
+                {filteredPosts.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {filteredPosts.map((post, index) => (
+                            <div key={post.id} className="card group flex flex-col overflow-hidden animate-fade-in">
+                                <div className="relative overflow-hidden aspect-video">
+                                    <img
+                                        src={post.image}
+                                        alt={post.title}
+                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                    />
+                                    <div className="absolute top-4 left-4 bg-primary-600 text-white text-xs font-medium px-2.5 py-1 rounded-md text-start">
+                                        {post.category}
+                                    </div>
+                                </div>
+
+                                <div className="flex-1 p-6 flex flex-col">
+                                    <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400 mb-3 text-start">
+                                        <time dateTime={post.date}>
+                                            {format(new Date(post.date), 'MMM d, yyyy')}
+                                        </time>
+                                        <span>•</span>
+                                        <span>{post.readTime} read</span>
+                                    </div>
+
+                                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors text-start">
+                                        {post.title}
+                                    </h2>
+
+                                    <div className="mt-4">
+                                        <div className="flex justify-evenly space-x-2">
+                                            <button className="btn-outline text-sm px-4 py-2">
+                                                Edit
+                                            </button>
+                                            <button className="btn-primary text-sm px-4 py-2">
+                                                View
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center py-16">
+                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
+                            <FiSearch className="h-8 w-8 text-gray-500 dark:text-gray-400" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                            No posts found
+                        </h3>
+                        <p className="text-gray-700 dark:text-gray-300 mb-6">
+                            {searchTerm || selectedCategory !== 'all'
+                                ? 'Try adjusting your search or filter criteria.'
+                                : 'No blog posts available yet.'
+                            }
+                        </p>
+                        {!searchTerm && selectedCategory === 'all' && (
+                            <Link to="/editor/new" className="btn-primary">
+                                Create your first post
+                            </Link>
+                        )}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default EditorPage;

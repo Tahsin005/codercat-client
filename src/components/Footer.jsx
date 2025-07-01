@@ -6,7 +6,6 @@ import { useGetPopularCategoriesQuery } from '../api/apiSlice';
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const { data: popularCategories, isLoading, isError } = useGetPopularCategoriesQuery();
-  console.log(popularCategories);
   return (
     <footer className="bg-gray-100 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
       <div className="container-custom py-12 text-start">

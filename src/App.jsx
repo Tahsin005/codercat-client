@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Router } from 'react-router-dom';
 
 import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
@@ -8,6 +8,7 @@ import SearchPage from './pages/SearchPage';
 import AboutPage from './pages/AboutPage';
 
 import './App.css';
+import EditorPage from './pages/EditorPage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="blog/:id" element={<BlogPostPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="about" element={<AboutPage />} />
+          <Route path="editor/:secretOne/:secretTwo" element={<EditorPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
