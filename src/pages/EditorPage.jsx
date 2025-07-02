@@ -131,40 +131,41 @@ const EditorPage = () => {
                 {filteredPosts.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {filteredPosts.map((post, index) => (
-                            <div key={post.id} className="card group flex flex-col overflow-hidden animate-fade-in">
+                            <div key={post.id} className="relative bg-primary-950/70 dark:bg-gray-900/70 rounded-2xl overflow-hidden shadow-lg group">
                                 <div className="relative overflow-hidden aspect-video">
                                     <img
                                         src={post.image}
                                         alt={post.title}
-                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                        className="w-full h-full object-cover"
                                     />
-                                    <div className="absolute top-4 left-4 bg-primary-600 text-white text-xs font-medium px-2.5 py-1 rounded-md text-start">
+                                    <div className="absolute top-4 left-4 bg-primary-600 text-white text-sm font-bold px-3 py-1.5 rounded-md">
                                         {post.category}
                                     </div>
                                 </div>
 
-                                <div className="flex-1 p-6 flex flex-col">
-                                    <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400 mb-3 text-start">
+                                <div className="p-6 flex flex-col justify-around">
+                                    <div className="flex items-center space-x-3 text-sm text-primary-300 font-sans mb-4">
                                         <time dateTime={post.date}>
                                             {format(new Date(post.date), 'MMM d, yyyy')}
                                         </time>
-                                        <span>•</span>
+                                        <span className="text-secondary-400">•</span>
                                         <span>{post.readTime} read</span>
                                     </div>
 
-                                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors text-start">
+                                    <h2 className="text-xl font-bold text-white mb-4 group-hover:text-accent-300 transition-colors font-sans text-start">
                                         {post.title}
                                     </h2>
 
-                                    <div className="mt-4">
-                                        <div className="flex justify-evenly space-x-2">
-                                            <button className="btn-outline text-sm px-4 py-2 flex items-center justify-center">
-                                                <FiEdit3 className="h-5 w-5" />
-                                            </button>
-                                            <button className="btn-primary text-sm px-4 py-2 flex items-center justify-center" onClick={() => setViewedPost(post)}>
-                                                <FiEye className="h-5 w-5" />
-                                            </button>
-                                        </div>
+                                    <div className="flex justify-evenly space-x-3">
+                                        <button className="flex-1 px-4 py-2 bg-primary-600  text-white rounded-md hover:shadow-lg flex items-center justify-center">
+                                            <FiEdit3 className="h-5 w-5 mx-auto" />
+                                        </button>
+                                        <button
+                                            className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-md hover:shadow-lg flex items-center justify-center"
+                                            onClick={() => setViewedPost(post)}
+                                        >
+                                            <FiEye className="h-5 w-5 mx-auto" />
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -172,21 +173,23 @@ const EditorPage = () => {
                     </div>
                 ) : (
                     <div className="text-center py-16">
-                        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
-                            <FiSearch className="h-8 w-8 text-gray-500 dark:text-gray-400" />
+                        <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary-800/50 shadow-lg mb-6">
+                            <FiSearch className="h-10 w-10 text-secondary-400" />
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                            No posts found
+                        <h3 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-secondary-400 font-sans mb-4">
+                            No Posts Found
                         </h3>
-                        <p className="text-gray-700 dark:text-gray-300 mb-6">
+                        <p className="text-primary-200 font-sans mb-6">
                             {searchTerm || selectedCategory !== 'all'
-                                ? 'Try adjusting your search or filter criteria.'
-                                : 'No blog posts available yet.'
-                            }
+                                ? 'Adjust your search or filter to find those funky posts!'
+                                : 'No blog posts yet. Time to create something epic!'}
                         </p>
                         {!searchTerm && selectedCategory === 'all' && (
-                            <Link to="/editor/new" className="btn-primary">
-                                Create your first post
+                            <Link
+                                to="/editor/new"
+                                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-accent-400 to-secondary-500 text-white font-bold rounded-full hover:shadow-lg"
+                            >
+                                Create Your First Post
                             </Link>
                         )}
                     </div>
