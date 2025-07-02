@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -10,6 +10,9 @@ const EditorPage = () => {
     const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('all');
+    const [viewedPost, setViewedPost] = useState(null);
+    const contentRef = useRef(null);
+    const [isOverflowing, setIsOverflowing] = useState(false);
 
     const secretValueFromEnvOne = import.meta.env.VITE_EDITOR_SECRET_ONE;
     const secretValueFromEnvTwo = import.meta.env.VITE_EDITOR_SECRET_TWO;
@@ -21,6 +24,15 @@ const EditorPage = () => {
     }, [secretOne, secretTwo, secretValueFromEnvOne, secretValueFromEnvTwo, navigate]);
 
     const { data: posts, isLoading, isError } = useGetBlogsQuery();
+
+    useEffect(() => {
+        if (viewedPost && contentRef.current) {
+            const el = contentRef.current;
+            setIsOverflowing(el.scrollHeight > el.clientHeight);
+        } else {
+            setIsOverflowing(false);
+        }
+    }, [viewedPost]);
 
     if (isLoading) {
         return (
@@ -146,11 +158,11 @@ const EditorPage = () => {
 
                                     <div className="mt-4">
                                         <div className="flex justify-evenly space-x-2">
-                                            <button className="btn-outline text-sm px-4 py-2">
-                                                Edit
+                                            <button className="btn-outline text-sm px-4 py-2 flex items-center justify-center">
+                                                <FiEdit3 className="h-5 w-5" />
                                             </button>
-                                            <button className="btn-primary text-sm px-4 py-2">
-                                                View
+                                            <button className="btn-primary text-sm px-4 py-2 flex items-center justify-center" onClick={() => setViewedPost(post)}>
+                                                <FiEye className="h-5 w-5" />
                                             </button>
                                         </div>
                                     </div>
@@ -180,6 +192,43 @@ const EditorPage = () => {
                     </div>
                 )}
             </div>
+            {/* Modal for viewing post content */}
+            {viewedPost && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 dark:bg-black/70"
+                    onClick={() => setViewedPost(null)}
+                >
+                    <div
+                        className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-2xl w-full p-8 relative animate-fade-in"
+                        style={{ maxHeight: '80vh' }}
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <button
+                            className="absolute top-4 right-4 text-gray-500 hover:text-primary-600 dark:hover:text-primary-400 text-2xl font-bold focus:outline-none"
+                            onClick={() => setViewedPost(null)}
+                            aria-label="Close"
+                        >
+                            &times;
+                        </button>
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                            {viewedPost.title}
+                        </h2>
+                        <div className="relative">
+                            <div
+                                ref={contentRef}
+                                className="text-gray-700 dark:text-gray-300 text-start whitespace-pre-line overflow-hidden pr-2"
+                                style={{ maxHeight: '60vh' }}
+                                dangerouslySetInnerHTML={{ __html: viewedPost.content }}
+                            ></div>
+                            {isOverflowing && (
+                                <div className="absolute bottom-0 left-0 w-full h-12 flex items-end justify-end pointer-events-none bg-gradient-to-t from-white/95 via-white/60 to-transparent dark:from-gray-900/95 dark:via-gray-900/60 dark:to-transparent">
+                                    <span className="text-2xl font-bold text-gray-400 mr-4 mb-2 select-none">...</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
