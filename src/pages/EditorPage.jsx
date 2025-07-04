@@ -93,7 +93,7 @@ const EditorPage = () => {
                             </p>
                         </div>
                         <Link
-                            to="/editor/new"
+                            to={`/editor/new/${secretOne}/${secretTwo}`}
                             className="btn-primary inline-flex items-center self-start"
                         >
                             <FiPlus className="h-5 w-5 mr-2" />
@@ -186,7 +186,7 @@ const EditorPage = () => {
                         </p>
                         {!searchTerm && selectedCategory === 'all' && (
                             <Link
-                                to="/editor/new"
+                                to={`/editor/new/${secretOne}/${secretTwo}`}
                                 className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-accent-400 to-secondary-500 text-white font-bold rounded-full hover:shadow-lg"
                             >
                                 Create Your First Post

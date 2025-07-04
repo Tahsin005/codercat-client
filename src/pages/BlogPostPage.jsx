@@ -117,7 +117,7 @@ const BlogPostPage = () => {
                 <div>
                   <span className="text-sm text-gray-600 dark:text-gray-400 block mb-2">Tags:</span>
                   <div className="flex flex-wrap gap-2">
-                    {post.tags.map(tag => (
+                    {post.tags && post.tags.map(tag => (
                       <Link
                         key={tag}
                         to={`/search?q=${tag}`}

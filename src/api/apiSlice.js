@@ -40,7 +40,14 @@ export const api = createApi({
                 body: JSON.stringify({ email }),
             }),
         }),
+        postBlog: builder.mutation({
+            query: (blog) => ({
+                url: '/blogs',
+                method: 'POST',
+                body: blog,
+            }),
+        }),
     }),
 });
 
-export const { useGetBlogsQuery, useGetRecentBlogsQuery, useGetBlogByIdQuery, useGetFeaturedBlogsQuery, useGetPostsByCategoryQuery, useGetCategoriesQuery, useSubscribeToNewsletterMutation, useGetBlogsBySearchQuery, useGetPopularCategoriesQuery, useGetRelatedBlogsQuery } = api;
+export const { useGetBlogsQuery, useGetRecentBlogsQuery, useGetBlogByIdQuery, useGetFeaturedBlogsQuery, useGetPostsByCategoryQuery, useGetCategoriesQuery, useSubscribeToNewsletterMutation, useGetBlogsBySearchQuery, useGetPopularCategoriesQuery, useGetRelatedBlogsQuery, usePostBlogMutation } = api;

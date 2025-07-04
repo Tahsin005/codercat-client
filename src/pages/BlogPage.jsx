@@ -35,7 +35,7 @@ const BlogPage = () => {
               <div key={i} className="animate-pulse bg-gray-100 dark:bg-gray-800 rounded-xl h-96"></div>
             ))}
           </div>
-        ) : posts.length > 0 ? (
+        ) : posts && posts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {posts.map((post, index) => (
               <BlogCard key={post.id} postIndex={index} post={post} featured={post.featured} />
