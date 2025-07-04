@@ -2,8 +2,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGetBlogsQuery } from '../api/apiSlice';
-import { FiEdit3, FiTrash2, FiEye, FiPlus, FiSearch } from 'react-icons/fi';
+import { useGetBlogsQuery, useDeleteBlogMutation } from '../api/apiSlice';
+import { FiEdit3, FiTrash2, FiEye, FiPlus, FiSearch, FiDelete } from 'react-icons/fi';
+import { toast } from 'react-hot-toast';
 
 const EditorPage = () => {
     const { secretOne, secretTwo } = useParams();
@@ -13,9 +14,9 @@ const EditorPage = () => {
     const [viewedPost, setViewedPost] = useState(null);
     const contentRef = useRef(null);
     const [isOverflowing, setIsOverflowing] = useState(false);
-
     const secretValueFromEnvOne = import.meta.env.VITE_EDITOR_SECRET_ONE;
     const secretValueFromEnvTwo = import.meta.env.VITE_EDITOR_SECRET_TWO;
+    const [deleteConfirmId, setDeleteConfirmId] = useState(null);
 
     useEffect(() => {
         if (secretOne !== secretValueFromEnvOne || secretTwo !== secretValueFromEnvTwo) {
@@ -23,7 +24,8 @@ const EditorPage = () => {
         }
     }, [secretOne, secretTwo, secretValueFromEnvOne, secretValueFromEnvTwo, navigate]);
 
-    const { data: posts, isLoading, isError } = useGetBlogsQuery();
+    const { data: posts, isLoading, isError, refetch } = useGetBlogsQuery();
+    const [deleteBlog, { isLoading: isDeleting }] = useDeleteBlogMutation();
 
     useEffect(() => {
         if (viewedPost && contentRef.current) {
@@ -33,6 +35,16 @@ const EditorPage = () => {
             setIsOverflowing(false);
         }
     }, [viewedPost]);
+
+    const handleDelete = async (id) => {
+        try {
+            await deleteBlog(id).unwrap();
+            refetch();
+            toast.success('Blog deleted successfully');
+        } catch (error) {
+            toast.error('Failed to delete blog');
+        }
+    };
 
     if (isLoading) {
         return (
@@ -141,6 +153,13 @@ const EditorPage = () => {
                                     <div className="absolute top-4 left-4 bg-primary-600 text-white text-sm font-bold px-3 py-1.5 rounded-md">
                                         {post.category}
                                     </div>
+                                    <button
+                                        className="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white shadow-lg border border-red-700 rounded-full p-2 text-2xl font-bold focus:outline-none z-20"
+                                        onClick={() => setDeleteConfirmId(post.id)}
+                                        title="Delete blog post"
+                                    >
+                                        <FiDelete className="h-5 w-5 mx-auto" />
+                                    </button>
                                 </div>
 
                                 <div className="p-6 flex flex-col justify-around">
@@ -228,6 +247,29 @@ const EditorPage = () => {
                                     <span className="text-2xl font-bold text-gray-400 mr-4 mb-2 select-none">...</span>
                                 </div>
                             )}
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Delete confirmation modal */}
+            {deleteConfirmId && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 dark:bg-black/70">
+                    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl max-w-md w-full p-8 relative animate-fade-in">
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Confirm Deletion</h2>
+                        <p className="mb-6 text-gray-700 dark:text-gray-300">Are you sure you want to delete this blog post?</p>
+                        <div className="flex justify-end gap-4">
+                            <button
+                                className="px-5 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600"
+                                onClick={() => setDeleteConfirmId(null)}
+                            >
+                                No
+                            </button>
+                            <button
+                                className="px-5 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
+                                onClick={() => { handleDelete(deleteConfirmId); setDeleteConfirmId(null); }}
+                            >
+                                Yes
+                            </button>
                         </div>
                     </div>
                 </div>
