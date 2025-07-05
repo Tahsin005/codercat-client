@@ -143,7 +143,7 @@ const EditorPage = () => {
                 {filteredPosts.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         {filteredPosts.map((post, index) => (
-                            <div key={post.id} className="relative bg-primary-950/70 dark:bg-gray-900/70 rounded-2xl overflow-hidden shadow-lg group">
+                            <div key={post.id} className="relative bg-primary-50 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg group">
                                 <div className="relative overflow-hidden aspect-video">
                                     <img
                                         src={post.image}
@@ -163,7 +163,7 @@ const EditorPage = () => {
                                 </div>
 
                                 <div className="p-6 flex flex-col justify-around">
-                                    <div className="flex items-center space-x-3 text-sm text-primary-300 font-sans mb-4">
+                                    <div className="flex items-center space-x-3 text-sm text-primary-400 font-sans mb-4">
                                         <time dateTime={post.date}>
                                             {format(new Date(post.date), 'MMM d, yyyy')}
                                         </time>
@@ -171,7 +171,7 @@ const EditorPage = () => {
                                         <span>{post.readTime} read</span>
                                     </div>
 
-                                    <h2 className="text-xl font-bold text-white mb-4 group-hover:text-accent-300 transition-colors font-sans text-start">
+                                    <h2 className="text-xl font-bold text-primary-600 dark:text-primary-400  mb-4 font-sans text-start">
                                         {post.title}
                                     </h2>
 
