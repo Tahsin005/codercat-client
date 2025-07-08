@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { usePostBlogMutation } from '../api/apiSlice';
 import { toast } from 'react-hot-toast';
 import { FiCopy } from 'react-icons/fi';
-import { Editor } from '@tinymce/tinymce-react';
 
 const EditorNew = () => {
     const { secretOne, secretTwo } = useParams();
@@ -107,17 +106,13 @@ const EditorNew = () => {
                         </div>
                         <div className='text-start'>
                             <label className="text-gray-700 dark:text-gray-200 font-semibold">Content</label>
-                            <Editor
-                                apiKey="bwzbe2s19r6uiddun2lmqfw3kklikbv4wepel2134rfw04au"
+                            <textarea
+                                name="content"
                                 value={form.content}
-                                onEditorChange={content => setForm(f => ({ ...f, content }))}
-                                init={{
-                                    height: 500,
-                                    menubar: true,
-                                    plugins: 'print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons',
-                                    toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
-                                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
-                                }}
+                                onChange={handleChange}
+                                rows={8}
+                                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 mt-1"
+                                required
                             />
                         </div>
                     </div>
