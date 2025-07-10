@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { usePostBlogMutation } from '../api/apiSlice';
 import { toast } from 'react-hot-toast';
 import { FiCopy } from 'react-icons/fi';
+import { GoArrowUpRight } from "react-icons/go";
 
 const EditorNew = () => {
     const { secretOne, secretTwo } = useParams();
@@ -105,7 +106,7 @@ const EditorNew = () => {
                             />
                         </div>
                         <div className='text-start'>
-                            <label className="text-gray-700 dark:text-gray-200 font-semibold">Content</label>
+                            <label className="text-gray-700 dark:text-gray-200 font-semibold">Content <a target='_blank' href='https://onlinehtmleditor.dev/'>Online Editor ↗️</a></label>
                             <textarea
                                 name="content"
                                 value={form.content}
