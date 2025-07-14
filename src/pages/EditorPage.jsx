@@ -176,9 +176,12 @@ const EditorPage = () => {
                                     </h2>
 
                                     <div className="flex justify-evenly space-x-3">
-                                        <button className="flex-1 px-4 py-2 bg-primary-600  text-white rounded-md hover:shadow-lg flex items-center justify-center">
+                                        <Link
+                                            to={`/editor/update/${post.id}/${secretOne}/${secretTwo}`}
+                                            className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-md hover:shadow-lg flex items-center justify-center"
+                                        >
                                             <FiEdit3 className="h-5 w-5 mx-auto" />
-                                        </button>
+                                        </Link>
                                         <button
                                             className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-md hover:shadow-lg flex items-center justify-center"
                                             onClick={() => setViewedPost(post)}

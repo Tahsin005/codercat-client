@@ -53,7 +53,14 @@ export const api = createApi({
                 method: 'DELETE',
             }),
         }),
+        updateBlog: builder.mutation({
+            query: ({ id, ...blog }) => ({
+                url: `/blogs/${id}`,
+                method: 'PUT',
+                body: blog,
+            }),
+        }),
     }),
 });
 
-export const { useGetBlogsQuery, useGetRecentBlogsQuery, useGetBlogByIdQuery, useGetFeaturedBlogsQuery, useGetPostsByCategoryQuery, useGetCategoriesQuery, useSubscribeToNewsletterMutation, useGetBlogsBySearchQuery, useGetPopularCategoriesQuery, useGetRelatedBlogsQuery, usePostBlogMutation, useDeleteBlogMutation } = api;
+export const { useGetBlogsQuery, useGetRecentBlogsQuery, useGetBlogByIdQuery, useGetFeaturedBlogsQuery, useGetPostsByCategoryQuery, useGetCategoriesQuery, useSubscribeToNewsletterMutation, useGetBlogsBySearchQuery, useGetPopularCategoriesQuery, useGetRelatedBlogsQuery, usePostBlogMutation, useDeleteBlogMutation, useUpdateBlogMutation } = api;

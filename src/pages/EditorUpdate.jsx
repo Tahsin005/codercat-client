@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { usePostBlogMutation } from '../api/apiSlice';
+import { useGetBlogByIdQuery, useUpdateBlogMutation } from '../api/apiSlice';
 import { toast } from 'react-hot-toast';
-import { FiCopy } from 'react-icons/fi';
-import { GoArrowUpRight } from "react-icons/go";
 
-const EditorNew = () => {
-    const { secretOne, secretTwo } = useParams();
+const EditorUpdate = () => {
+    const { id, secretOne, secretTwo } = useParams();
     const navigate = useNavigate();
-    const [postBlog, { isLoading, isError, error }] = usePostBlogMutation();
+    const { data: blog, isLoading, isError } = useGetBlogByIdQuery(id);
+    const [updateBlog, { isLoading: isUpdating }] = useUpdateBlogMutation();
 
     const secretValueFromEnvOne = import.meta.env.VITE_EDITOR_SECRET_ONE;
     const secretValueFromEnvTwo = import.meta.env.VITE_EDITOR_SECRET_TWO;
@@ -28,17 +27,31 @@ const EditorNew = () => {
         author: '',
         authorImage: '',
         readTime: '',
-        date: new Date().toISOString().slice(0, 10),
+        date: '',
         featured: false,
     });
-
     const [tags, setTags] = useState([]);
     const [tagInput, setTagInput] = useState('');
-
     const [imageError, setImageError] = useState(false);
     const [authorImageError, setAuthorImageError] = useState(false);
 
-    const DEFAULT_AUTHOR_IMAGE = 'https://res.cloudinary.com/df0gfmbkh/image/upload/v1738691322/fprwngmyn1bhlkvmgoqv.png';
+    useEffect(() => {
+        if (blog) {
+            setForm({
+                title: blog.title || '',
+                excerpt: blog.excerpt || '',
+                content: blog.content || '',
+                category: blog.category || '',
+                image: blog.image || '',
+                author: blog.author || '',
+                authorImage: blog.authorImage || '',
+                readTime: blog.readTime || '',
+                date: blog.date ? blog.date.slice(0, 10) : '',
+                featured: blog.featured || false,
+            });
+            setTags(blog.tags || []);
+        }
+    }, [blog]);
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -61,23 +74,26 @@ const EditorNew = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const payload = {
+            id,
             ...form,
             tags,
         };
-
         try {
-            await postBlog(payload).unwrap();
-            toast.success('Blog post created!');
+            await updateBlog(payload).unwrap();
+            toast.success('Blog post updated!');
             navigate(`/editor/${secretOne}/${secretTwo}`);
         } catch (err) {
-            toast.error('Failed to create post');
+            toast.error('Failed to update post');
         }
     };
 
+    if (isLoading) return <div className="container-custom py-12">Loading...</div>;
+    if (isError) return <div className="container-custom py-12 text-red-500">Failed to load blog post.</div>;
+
     return (
-        <div className="container-custom  py-12">
+        <div className="container-custom py-12">
             <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-10 text-start">
-                <span className="text-primary-600 dark:text-primary-400">Editor</span> New Post
+                <span className="text-primary-600 dark:text-primary-400">Editor</span> Update Post
             </h1>
             <form onSubmit={handleSubmit}>
                 {/* Post Details */}
@@ -131,7 +147,6 @@ const EditorNew = () => {
                         </div>
                     </div>
                 </div>
-
                 {/* Meta Info */}
                 <div className="bg-primary-50 dark:bg-gray-900 rounded-2xl shadow p-8 mb-8">
                     <h2 className="text-xl font-bold mb-6 text-primary-700 dark:text-primary-300">Meta</h2>
@@ -199,7 +214,6 @@ const EditorNew = () => {
                         </div>
                     </div>
                 </div>
-
                 {/* Author Info */}
                 <div className="bg-primary-50 dark:bg-gray-900 rounded-2xl shadow p-8 mb-8">
                     <h2 className="text-xl font-bold mb-6 text-primary-700 dark:text-primary-300">Author Info</h2>
@@ -217,33 +231,19 @@ const EditorNew = () => {
                         </div>
                         <div className='text-start'>
                             <label className="text-gray-700 dark:text-gray-200 font-semibold">Author Image URL</label>
-                            <div className="flex items-center gap-2">
-                                <input
-                                    type="text"
-                                    name="authorImage"
-                                    value={form.authorImage}
-                                    onChange={e => { setAuthorImageError(false); handleChange(e); }}
-                                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 mt-1"
-                                    required
-                                />
-                                <button
-                                    type="button"
-                                    className="p-2 rounded-md bg-primary-600 text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                                    onClick={() => {
-                                        setForm(f => ({ ...f, authorImage: DEFAULT_AUTHOR_IMAGE }));
-                                        setAuthorImageError(false);
-                                        toast.success('Default author image set!');
-                                    }}
-                                    title="Use default author image"
-                                >
-                                    <FiCopy className="h-5 w-5" />
-                                </button>
-                            </div>
+                            <input
+                                type="text"
+                                name="authorImage"
+                                value={form.authorImage}
+                                onChange={e => { setAuthorImageError(false); handleChange(e); }}
+                                className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 mt-1"
+                                required
+                            />
                             {form.authorImage && !authorImageError && (
                                 <img
                                     src={form.authorImage}
                                     alt="Author Preview"
-                                    className="mt-3 w-20 h-20 object-cover rounded-full border border-gray-300 dark:border-gray-700"
+                                    className="mt-3 w-full max-w-xs h-20 object-cover rounded-lg border border-gray-300 dark:border-gray-700"
                                     onError={() => setAuthorImageError(true)}
                                 />
                             )}
@@ -275,22 +275,16 @@ const EditorNew = () => {
                         </div>
                     </div>
                 </div>
-
                 <button
                     type="submit"
-                    className="btn-primary w-full py-3 mt-6"
-                    disabled={isLoading}
+                    className="btn-primary px-8 py-3 rounded-lg font-bold text-lg mt-4"
+                    disabled={isUpdating}
                 >
-                    {isLoading ? 'Creating...' : 'Create Post'}
+                    {isUpdating ? 'Updating...' : 'Update Post'}
                 </button>
-                {isError && (
-                    <p className="text-red-600 dark:text-red-400 text-center mt-2">
-                        {error?.data?.message || 'Failed to create post.'}
-                    </p>
-                )}
             </form>
         </div>
     );
 };
 
-export default EditorNew;
+export default EditorUpdate;

@@ -10,6 +10,7 @@ import AboutPage from './pages/AboutPage';
 import './App.css';
 import EditorPage from './pages/EditorPage';
 import EditorNew from './pages/EditorNew';
+import EditorUpdate from './pages/EditorUpdate';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="about" element={<AboutPage />} />
           <Route path="editor/:secretOne/:secretTwo" element={<EditorPage />} />
           <Route path="editor/new/:secretOne/:secretTwo" element={<EditorNew />} />
+          <Route path="editor/update/:id/:secretOne/:secretTwo" element={<EditorUpdate />} />
         </Route>
       </Routes>
     </BrowserRouter>
