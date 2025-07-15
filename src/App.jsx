@@ -12,7 +12,7 @@ import EditorPage from './pages/EditorPage';
 import EditorNew from './pages/EditorNew';
 import EditorUpdate from './pages/EditorUpdate';
 
-// Mock changes to trigger deyployment
+// Mock changes to trigger redeyployment
 
 function App() {
   return (
