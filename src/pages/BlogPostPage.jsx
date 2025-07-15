@@ -108,7 +108,7 @@ const BlogPostPage = () => {
         <div className="flex flex-col md:flex-row gap-10">
           <article className="max-w-3xl w-full mx-auto">
             <div
-              className="prose prose-lg text-lg dark:prose-invert text-start max-w-none mb-8"
+              className="prose prose-lg text-lg dark:prose-invert text-start max-w-none mb-8 break-words whitespace-pre-line"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
 
